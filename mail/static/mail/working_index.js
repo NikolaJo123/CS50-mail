@@ -55,5 +55,6 @@ function submit() {
     .then(result => {
         console.log(result)
     })
+    load_mailbox('sent');
     return false
 }

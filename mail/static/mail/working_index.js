@@ -101,6 +101,11 @@ function show_email(id, mailbox) {
             <div>Subject: ${email.subject}</div>
             <div>Timestamp: ${email.timestamp}</div>            
             
+            <div class="email-buttons">
+                <button class="btn-email" id="reply">Reply</button>
+                <button class="btn-email" id="archive">${email["archived"] ? "Unarchive" : "Archive"}</button>
+            </div>
+            <hr>
             <div>
                 ${email.body}
             </div>

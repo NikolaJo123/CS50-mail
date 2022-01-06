@@ -112,6 +112,7 @@ function show_email(id, mailbox) {
             `;
 
             document.querySelector('#archive').addEventListener('click', () => archive_email(id))
+            document.querySelector('#reply').addEventListener('click', () => reply_email(id))
         })
 }
 
@@ -138,3 +139,35 @@ function archive_email(id, email) {
         load_mailbox('inbox');
     })
 }
+
+
+function reply_email(id) {
+
+    fetch(`/emails/${id}`)
+        .then(response => response.json())
+        .then(email => {
+            document.querySelector('#reply').addEventListener('click', () => {
+
+                document.querySelector('#emails-view').style.display = 'none';
+                document.querySelector('#compose-view').style.display = 'block';
+                document.querySelector('#email-view').style.display = 'none';
+
+                document.querySelector('#compose-recipients').value = email.sender;
+
+
+                console.log(email.subject.slice(0, 3))
+                console.log(email.subject.slice(0, 3) != "Re:")
+
+                if (email.subject.slice(0, 3) != "Re:") {
+                    document.querySelector('#compose-subject').value = "Re:" + email.subject;
+                } else {
+                    document.querySelector('#compose-subject').value = email.subject;
+                }
+
+                document.querySelector('#compose-body').value = `On ${email.timestamp} ${email.sender} wrote:\n${email.body}\n\n`;
+
+
+            })
+        })
+}
+

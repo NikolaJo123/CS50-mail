@@ -96,20 +96,45 @@ function show_email(id, mailbox) {
         .then(email => {
             console.log(email);
             document.querySelector('#email-view').innerHTML = `
-            <div>From: ${email.sender}</div>
-            <div>To: ${email.recipients}</div>
-            <div>Subject: ${email.subject}</div>
-            <div>Timestamp: ${email.timestamp}</div>            
-            
-            <div class="email-buttons">
-                <button class="btn-email" id="reply">Reply</button>
-                <button class="btn-email" id="archive">${email["archived"] ? "Unarchive" : "Archive"}</button>
-            </div>
-            <hr>
-            <div>
-                ${email.body}
-            </div>
-            
-          `;
+                <div>From: ${email.sender}</div>
+                <div>To: ${email.recipients}</div>
+                <div>Subject: ${email.subject}</div>
+                <div>Timestamp: ${email.timestamp}</div>            
+                
+                <div class="email-buttons">
+                    <button class="btn-email" id="reply">Reply</button>
+                    <button class="btn-email" id="archive">${email["archived"] ? "Unarchive" : "Archive"}</button>
+                </div>
+                <hr>
+                <div>
+                    ${email.body}
+                </div>
+            `;
+
+            document.querySelector('#archive').addEventListener('click', () => archive_email(id))
         })
+}
+
+
+function archive_email(id, email) {
+
+    const emailStatus = document.querySelector("#archive").innerHTML.toLowerCase();
+    let status;
+
+    if ( emailStatus === 'archive' ) {
+        status = true;
+    } else {
+        status = false;
+    }
+
+    fetch(`emails/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+            archived: status
+        })
+    })
+    .then(email => {
+        console.log(email)
+        load_mailbox('inbox');
+    })
 }
